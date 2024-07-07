@@ -1,0 +1,18 @@
+#!/bin/sh
+tmux new-session -d
+
+DIR="$1"
+CONDA="main"  # Default value
+
+if [[ -n "$2" ]]; then
+    CONDA="$2"
+fi
+
+tmux send-keys "cd $DIR ; conda activate $CONDA" C-m
+tmux send-keys "nvim ." C-m
+tmux rename-window "ide"
+tmux split-window -v
+tmux send-keys "conda activate $CONDA" C-m
+tmux send-keys "clear" C-m
+tmux select-pane -t 0
+tmux -2 attach-session
