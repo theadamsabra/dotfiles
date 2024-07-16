@@ -67,9 +67,9 @@ return {
       -- if you want to know more about mason.nvim
       -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
       lsp_zero.on_attach(function(client, bufnr)
-        -- see :help lsp-zero-keybindings
-        -- to learn the available actions
-        lsp_zero.default_keymaps({buffer = bufnr})
+      -- see :help lsp-zero-keybindings
+      -- to learn the available actions
+      lsp_zero.default_keymaps({buffer = bufnr})
       end)
 
       require('mason-lspconfig').setup({
