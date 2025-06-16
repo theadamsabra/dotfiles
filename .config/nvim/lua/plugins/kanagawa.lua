@@ -12,8 +12,8 @@
         typeStyle = {},
         transparent = false,         -- do not set background color
         dimInactive = false,         -- dim inactive window `:h hl-NormalNC`
-        theme = "wave",              -- Load "wave" theme when 'background' option is not set
+        theme = "dragon",              -- Load "wave" theme when 'background' option is not set
       })
-    vim.cmd.colorscheme("kanagawa-wave")
+    vim.cmd.colorscheme("kanagawa-dragon")
     end
   }

@@ -51,6 +51,13 @@ return {
     dashboard.section.header.val = header
     dashboard.section.header.opts.hl = "Include" 
 
+
+    -- Set buttons below header:
+    dashboard.section.buttons.val = {
+      dashboard.button( "f", "  > Find file", ":Telescope find_files<CR>"),
+      dashboard.button( "r", "  > Recent"   , ":Telescope oldfiles<CR>"),
+      dashboard.button( "q", "  > Quit NVIM", ":qa<CR>"),
+    }
     -- Send config to alpha
     alpha.setup(dashboard.opts)
   end
