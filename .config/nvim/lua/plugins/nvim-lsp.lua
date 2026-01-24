@@ -35,11 +35,27 @@ return {
       cmp.setup({
         formatting = lsp_zero.cmp_format({details = true}),
         mapping = cmp.mapping.preset.insert({
-          ['<Tab>'] = cmp.mapping.complete(),
-          ['<Tab-u>'] = cmp.mapping.scroll_docs(-4),
-          ['<Tab-d>'] = cmp.mapping.scroll_docs(4),
-          ['<Tab-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<Tab-b>'] = cmp_action.luasnip_jump_backward(),
+          ['<CR>'] = cmp.mapping.confirm({select = false}),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif require('luasnip').expand_or_jumpable() then
+              require('luasnip').expand_or_jump()
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif require('luasnip').jumpable(-1) then
+              require('luasnip').jump(-1)
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
         }),
         snippet = {
           expand = function(args)
@@ -67,13 +83,16 @@ return {
       -- if you want to know more about mason.nvim
       -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
       lsp_zero.on_attach(function(client, bufnr)
-      -- see :help lsp-zero-keybindings
-      -- to learn the available actions
-      lsp_zero.default_keymaps({buffer = bufnr})
+        -- see :help lsp-zero-keybindings
+        -- to learn the available actions
+        lsp_zero.default_keymaps({buffer = bufnr})
+
+        -- Keybind to show docstrings/hover documentation
+        vim.keymap.set('n', '<leader>k', vim.lsp.buf.hover, {buffer = bufnr, desc = 'Show hover documentation'})
       end)
 
       require('mason-lspconfig').setup({
-        ensure_installed = {},
+        ensure_installed = {'basedpyright'},
         handlers = {
           -- this first function is the "default handler"
           -- it applies to every language server without a "custom handler"
@@ -86,6 +105,21 @@ return {
             -- (Optional) Configure lua language server for neovim
             local lua_opts = lsp_zero.nvim_lua_ls()
             require('lspconfig').lua_ls.setup(lua_opts)
+          end,
+
+          -- Python LSP with basedpyright
+          basedpyright = function()
+            require('lspconfig').basedpyright.setup({
+              settings = {
+                basedpyright = {
+                  analysis = {
+                    autoSearchPaths = true,
+                    useLibraryCodeForTypes = true,
+                    diagnosticMode = 'openFilesOnly',
+                  },
+                },
+              },
+            })
           end,
         }
       })
