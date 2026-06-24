@@ -7,6 +7,11 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Setup: 
+-- Shim removed in Neovim 0.11, still called by Telescope's previewer
+if not vim.treesitter.language.ft_to_lang then
+  vim.treesitter.language.ft_to_lang = vim.treesitter.language.get_lang
+end
+
+-- Setup:
 require("vim-config")
 require("lazy").setup("plugins")
