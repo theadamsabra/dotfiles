@@ -1,7 +1,13 @@
 return {
-  'nvim-telescope/telescope.nvim', tag = '0.1.8',
+  'nvim-telescope/telescope.nvim',
   dependencies = { 'nvim-lua/plenary.nvim'},
   config = function()
+    -- vim.F.if_nil removed in nvim 0.12, vim.nonnil doesn't exist; patch before any finder runs
+    local tu = require("telescope.utils")
+    if not tu.if_nil then
+      tu.if_nil = function(a, b) return a ~= nil and a or b end
+    end
+
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
