@@ -11,6 +11,7 @@ return {
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+    vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 
     -- Allow for hidden files
     -- https://stackoverflow.com/questions/71809098/how-to-include-specific-hidden-file-folder-in-search-result-when-using-telescope/76991432#76991432
