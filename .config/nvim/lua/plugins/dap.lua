@@ -24,8 +24,34 @@ return {
       vim.api.nvim_set_hl(0, 'DapStoppedLine', {bg = '#2e4d3d'})
 
       -- Setup Python debugging
-      -- Requires debugpy: pip install debugpy
-      require('dap-python').setup('python')
+      -- Requires debugpy: pip3 install --user debugpy
+      require('dap-python').setup('python3')
+
+      -- Use venv python when available, evaluated at debug time
+      local function get_python()
+        if vim.env.VIRTUAL_ENV then
+          return vim.env.VIRTUAL_ENV .. '/bin/python'
+        end
+        local venv = vim.fn.finddir('.venv', vim.fn.getcwd() .. ';')
+        if venv ~= '' then
+          return vim.fn.fnamemodify(venv, ':p') .. 'bin/python'
+        end
+        return 'python3'
+      end
+
+      for _, config in ipairs(dap.configurations.python or {}) do
+        config.pythonPath = get_python
+      end
+
+      -- ponytail: adapter as function so get_python() runs at debug time, not load time
+      dap.adapters.python = function(cb, _)
+        cb({
+          type = 'executable',
+          command = get_python(),
+          args = { '-m', 'debugpy.adapter' },
+          options = { source_filetype = 'python' },
+        })
+      end
 
       -- Automatically open/close dap-ui
       dap.listeners.after.event_initialized['dapui_config'] = function()
