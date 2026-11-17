@@ -161,3 +161,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 .bashrc
+
+# Global env secrets (stowed to ~/.env): track the template, not the secrets.
+# Re-include the env/ package dir (ignored by 'env/' above), then ignore the live file.
+!env/
+env/.env
