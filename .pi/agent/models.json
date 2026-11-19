@@ -6,7 +6,7 @@
       "api": "openai-completions",
       "apiKey": "hey",
       "models": [
-        {"id": "unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_M"}
+        {"id": "local/qwen"}
       ]
     }
   }
