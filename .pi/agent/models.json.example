@@ -2,12 +2,10 @@
   "$schema": "https://pi.dev/schemas/models.schema.json",
   "providers": {
     "local-server": {
-      "baseUrl": "http://100.84.206.124:8000/v1",
+      "baseUrl": "http://$PI_MODEL_HOST:$PI_MODEL_PORT/v1",
       "api": "openai-completions",
-      "apiKey": "hey",
-      "models": [
-        {"id": "local/qwen"}
-      ]
+      "apiKey": "$PI_MODEL_API_KEY",
+      "models": [{"id": "local/qwen"}]
     }
   }
 }
