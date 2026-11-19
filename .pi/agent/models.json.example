@@ -1,10 +1,16 @@
 {
   "$schema": "https://pi.dev/schemas/models.schema.json",
   "providers": {
-    "local-server": {
-      "baseUrl": "http://$PI_MODEL_HOST:$PI_MODEL_PORT/v1",
+    "subagent": {
+      "baseUrl": "http://$PI_MODEL_HOST:$PI_SUBAGENT_PORT/v1",
       "api": "openai-completions",
-      "apiKey": "$PI_MODEL_API_KEY",
+      "apiKey": "$PI_SUBAGENT_API_KEY",
+      "models": [{"id": "local/qwen"}]
+    },
+    "orchestrator": {
+      "baseUrl": "http://$PI_MODEL_HOST:$PI_ORCHESTRATOR_PORT/v1",
+      "api": "openai-completions",
+      "apiKey": "$PI_ORCHESTRATOR_API_KEY",
       "models": [{"id": "local/qwen"}]
     }
   }

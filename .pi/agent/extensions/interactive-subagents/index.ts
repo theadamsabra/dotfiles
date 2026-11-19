@@ -64,6 +64,14 @@ import {
 /** Absolute path to `~/.pi/agent/extensions/interactive-subagents`. https://github.com/nodejs/node/issues/37845 */
 const SUBAGENTS_DIR = dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Fallback model for subagent launches that neither the tool call nor the
+ * agent frontmatter pins. Subagents run on the subagent provider so the
+ * parent stays on its (orchestrator) model. Scoped to `subagent/` because
+ * both providers expose the same model id.
+ */
+const DEFAULT_SUBAGENT_MODEL = "subagent/local/qwen";
+
 
 // Survive /reload: clear timers and abort poll loops from the previous module load.
 // /reload re-imports this file, giving fresh module-level state, but closures from
@@ -1175,7 +1183,7 @@ async function launchSubagent(
   const id = Math.random().toString(16).slice(2, 10);
 
   const agentDefs = params.agent ? loadAgentDefaults(params.agent) : null;
-  const effectiveModel = params.model ?? agentDefs?.model;
+  const effectiveModel = params.model ?? agentDefs?.model ?? DEFAULT_SUBAGENT_MODEL;
   const effectiveTools = agentDefs?.tools;
   const effectiveSkills = agentDefs?.skills;
   const effectiveThinking = agentDefs?.thinking;
